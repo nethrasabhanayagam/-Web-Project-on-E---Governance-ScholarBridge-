@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScholarBridge - Scholarship Finder</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f8ff;
+    color: #1d2939;
+    line-height: 1.6;
+}
+
+header {
+    background: #142b4a;
+    color: white;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+header h2 span {
+    color: #79a8ff;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 18px;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #79a8ff;
+}
+
+.hero {
+    padding: 65px 8%;
+    background: linear-gradient(120deg, #e5edff, #f8fbff);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.hero-content {
+    flex: 1;
+    min-width: 260px;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    color: #142b4a;
+    line-height: 1.15;
+    margin-bottom: 18px;
+}
+
+.hero h1 span {
+    color: #2864dc;
+}
+
+.hero p {
+    color: #667085;
+    margin-bottom: 25px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #2864dc;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background: #1c4db4;
+}
+
+.hero-card {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 10px 30px #142b4a15;
+    width: 300px;
+    max-width: 100%;
+}
+
+.hero-card h3 {
+    color: #142b4a;
+    margin-bottom: 10px;
+}
+
+.hero-card .emoji {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 25px 8%;
+}
+
+.stat {
+    background: white;
+    padding: 20px;
+    border: 1px solid #e5eaf2;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.stat h3 {
+    color: #2864dc;
+    font-size: 22px;
+}
+
+main {
+    padding: 35px 8% 60px;
+}
+
+.section-title {
+    color: #142b4a;
+    font-size: 30px;
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    color: #667085;
+    margin-bottom: 24px;
+}
+
+.filters {
+    background: white;
+    padding: 18px;
+    border: 1px solid #e5eaf2;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d5ddea;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+}
+
+.scholarship-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.scholarship-card {
+    background: white;
+    border: 1px solid #e5eaf2;
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    transition: 0.2s;
+}
+
+.scholarship-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px #142b4a12;
+}
+
+.card-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.scholarship-card h3 {
+    color: #142b4a;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.provider {
+    color: #667085;
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+
+.amount {
+    color: #2864dc;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.tag {
+    display: inline-block;
+    width: fit-content;
+    background: #e8f8ef;
+    color: #18794e;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    margin-bottom: 14px;
+}
+
+.deadline {
+    color: #9a5a00;
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.card-actions a,
+.card-actions button {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    padding: 10px 7px;
+}
+
+.save-btn {
+    border: 1px solid #d5ddea;
+    border-radius: 8px;
+    background: white;
+    color: #2864dc;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.save-btn.saved {
+    background: #e5edff;
+}
+
+.empty-state {
+    display: none;
+    padding: 25px;
+    text-align: center;
+    color: #667085;
+    grid-column: 1 / -1;
+}
+
+.eligibility {
+    margin-top: 55px;
+    background: #142b4a;
+    color: white;
+    padding: 30px;
+    border-radius: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: center;
+}
+
+.eligibility h2 {
+    margin-bottom: 10px;
+}
+
+.eligibility p {
+    color: #d5dfef;
+}
+
+.eligibility form {
+    display: grid;
+    gap: 12px;
+}
+
+.eligibility label {
+    font-size: 13px;
+}
+
+.eligibility select {
+    margin-top: 5px;
+}
+
+.result {
+    display: none;
+    padding: 12px;
+    background: #ffffff18;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.how {
+    margin-top: 55px;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.step {
+    padding: 22px;
+    background: white;
+    border: 1px solid #e5eaf2;
+    border-radius: 12px;
+}
+
+.step h3 {
+    color: #142b4a;
+    margin: 10px 0;
+}
+
+.step p {
+    color: #667085;
+    font-size: 14px;
+}
+
+.notice {
+    background: #fff6e5;
+    color: #77531b;
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+footer {
+    background: #101f36;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    font-size: 13px;
+}
+
+footer a {
+    color: #9fc1ff;
+}
+
+@media (max-width: 900px) {
+    .scholarship-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .filters {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 16px 5%;
+    }
+
+    nav a {
+        margin-left: 8px;
+        font-size: 12px;
+    }
+
+    .hero {
+        padding: 40px 6%;
+    }
+
+    .stats,
+    .scholarship-grid,
+    .steps,
+    .eligibility {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        padding: 20px 6%;
+    }
+
+    main {
+        padding: 30px 6% 45px;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>🎓 Scholar<span>Bridge</span></h2>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#scholarships">Scholarships</a>
+        <a href="#eligibility">Eligibility</a>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <div class="hero-content">
+        <h1>Your ambition.<br>
+        <span>Your opportunity.</span></h1>
+
+        <p>
+            Discover scholarships, explore eligibility criteria,
+            and take the next step towards your educational dreams.
+        </p>
+
+        <a href="#scholarships" class="btn">
+            Explore Scholarships →
+        </a>
+    </div>
+
+    <div class="hero-card">
+        <div class="emoji">📚 🎓</div>
+        <h3>Your future starts here</h3>
+        <p>Search opportunities, save scholarships, and keep your application journey organised.</p>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="stat">
+        <h3>Search</h3>
+        <p>Find scholarships</p>
+    </div>
+
+    <div class="stat">
+        <h3>Filter</h3>
+        <p>Match your study level</p>
+    </div>
+
+    <div class="stat">
+        <h3>Apply</h3>
+        <p>Visit official portals</p>
+    </div>
+</section>
+
+<main>
+    <section id="scholarships">
+        <h2 class="section-title">Explore Scholarships</h2>
+        <p class="subtitle">
+            Discover opportunities for different education levels.
+        </p>
+
+        <div class="filters">
+            <input
+                type="search"
+                id="search"
+                placeholder="Search scholarships..."
+                aria-label="Search scholarships"
+            >
+
+            <select id="level" aria-label="Education level">
+                <option value="all">All levels</option>
+                <option value="school">School</option>
+                <option value="ug">Undergraduate</option>
+                <option value="pg">Postgraduate</option>
+            </select>
+
+            <select id="category" aria-label="Scholarship category">
+                <option value="all">All categories</option>
+                <option value="merit">Merit-based</option>
+                <option value="need">Need-based</option>
+                <option value="community">Government scheme</option>
+            </select>
+
+            <button class="btn" id="reset" type="button">Reset</button>
+        </div>
+
+        <div class="scholarship-grid" id="grid">
+
+            <article class="scholarship-card"
+                data-title="national means cum merit scholarship nmms"
+                data-level="school"
+                data-category="merit need">
+
+                <div class="card-icon">🏅</div>
+                <span class="tag">School students</span>
+                <h3>National Means-cum-Merit Scholarship</h3>
+                <p class="provider">Government of India</p>
+                <p class="amount">₹12,000 / year</p>
+                <p class="deadline">🗓️ Check current application deadline</p>
+
+                <div class="card-actions">
+                    <a class="btn"
+                       href="https://scholarships.gov.in/"
+                       target="_blank" rel="noopener noreferrer">
+                       Official Portal ↗
+                    </a>
+                    <button class="save-btn" type="button"
+                        aria-pressed="false">♡ Save</button>
+                </div>
+            </article>
+
+            <article class="scholarship-card"
+                data-title="post matric scholarship sc students"
+                data-level="ug pg"
+                data-category="need community">
+
+                <div class="card-icon">📘</div>
+                <span class="tag">Post-matric</span>
+                <h3>Post-Matric Scholarship for SC Students</h3>
+                <p class="provider">Government scholarship scheme</p>
+                <p class="amount">Amount varies</p>
+                <p class="deadline">🗓️ Check current application deadline</p>
+
+                <div class="card-actions">
+                    <a class="btn"
+                       href="https://scholarships.gov.in/"
+                       target="_blank" rel="noopener noreferrer">
+                       Official Portal ↗
+                    </a>
+                    <button class="save-btn" type="button"
+                        aria-pressed="false">♡ Save</button>
+                </div>
+            </article>
+
+            <article class="scholarship-card"
+                data-title="central sector scheme scholarship college university"
+                data-level="ug"
+                data-category="merit need">
+
+                <div class="card-icon">🎓</div>
+                <span class="tag">Higher education</span>
+                <h3>Central Sector Scholarship Scheme</h3>
+                <p class="provider">Ministry of Education</p>
+                <p class="amount">As notified</p>
+                <p class="deadline">🗓️ Check current application deadline</p>
+
+                <div class="card-actions">
+                    <a class="btn"
+                       href="https://scholarships.gov.in/"
+                       target="_blank" rel="noopener noreferrer">
+                       Official Portal ↗
+                    </a>
+                    <button class="save-btn" type="button"
+                        aria-pressed="false">♡ Save</button>
+                </div>
+            </article>
+
+            <article class="scholarship-card"
+                data-title="aicte pragati scholarship girl students technical education"
+                data-level="ug"
+                data-category="need community">
+
+                <div class="card-icon">🌱</div>
+                <span class="tag">Technical education</span>
+                <h3>AICTE Pragati Scholarship</h3>
+                <p class="provider">AICTE</p>
+                <p class="amount">As notified</p>
+                <p class="deadline">🗓️ Check current application deadline</p>
+
+                <div class="card-actions">
+                    <a class="btn"
+                       href="https://www.aicte-india.org/"
+                       target="_blank" rel="noopener noreferrer">
+                       AICTE Website ↗
+                    </a>
+                    <button class="save-btn" type="button"
+                        aria-pressed="false">♡ Save</button>
+                </div>
+            </article>
+
+            <article class="scholarship-card"
+                data-title="aicte swanath scholarship students"
+                data-level="ug"
+                data-category="need community">
+
+                <div class="card-icon">🤝</div>
+                <span class="tag">Student support</span>
+                <h3>AICTE Swanath Scholarship</h3>
+                <p class="provider">AICTE</p>
+                <p class="amount">As notified</p>
+                <p class="deadline">🗓️ Check current application deadline</p>
+
+                <div class="card-actions">
+                    <a class="btn"
+                       href="https://www.aicte-india.org/"
+                       target="_blank" rel="noopener noreferrer">
+                       AICTE Website ↗
+                    </a>
+                    <button class="save-btn" type="button"
+                        aria-pressed="false">♡ Save</button>
+                </div>
+            </article>
+
+            <article class="scholarship-card"
+                data-title="state central government scholarship schemes"
+                data-level="school ug pg"
+                data-category="need merit community">
+
+                <div class="card-icon">🇮🇳</div>
+                <span class="tag">Multiple schemes</span>
+                <h3>Central and State Scholarships</h3>
+                <p class="provider">Various government departments</p>
+                <p class="amount">Varies by scheme</p>
+                <p class="deadline">🗓️ Depends on the scheme</p>
+
+                <div class="card-actions">
+                    <a class="btn"
+                       href="https://scholarships.gov.in/"
+                       target="_blank" rel="noopener noreferrer">
+                       Browse Schemes ↗
+                    </a>
+                    <button class="save-btn" type="button"
+                        aria-pressed="false">♡ Save</button>
+                </div>
+            </article>
+
+            <p class="empty-state" id="empty">
+                No scholarships found. Try another search or filter.
+            </p>
+        </div>
+
+        <div class="notice">
+            <strong>Important:</strong> This is a student project prototype,
+            not an official government website. Scholarship details,
+            amounts, eligibility and deadlines may change. Always verify
+            them on the relevant official portal.
+        </div>
+    </section>
+
+    <section class="eligibility" id="eligibility">
+        <div>
+            <h2>Find scholarships for you</h2>
+            <p>
+                Choose your education level and preferred scholarship type.
+                This demo filters sample listings and does not confirm
+                official eligibility.
+            </p>
+        </div>
+
+        <form id="eligibilityForm">
+            <div>
+                <label for="studyLevel">Education level</label>
+                <select id="studyLevel" required>
+                    <option value="">Select your level</option>
+                    <option value="school">School</option>
+                    <option value="ug">Undergraduate</option>
+                    <option value="pg">Postgraduate</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="priority">Scholarship type</label>
+                <select id="priority" required>
+                    <option value="">Select a type</option>
+                    <option value="merit">Merit-based</option>
+                    <option value="need">Need-based</option>
+                    <option value="community">Government scheme</option>
+                </select>
+            </div>
+
+            <button class="btn" type="submit">
+                Find matching scholarships →
+            </button>
+
+            <div class="result" id="result" aria-live="polite"></div>
+        </form>
+    </section>
+
+    <section class="how">
+        <h2 class="section-title">How It Works</h2>
+        <p class="subtitle">Three simple steps to get started.</p>
+
+        <div class="steps">
+            <div class="step">
+                <span>01 · DISCOVER</span>
+                <h3>Explore</h3>
+                <p>Search and filter scholarships that interest you.</p>
+            </div>
+
+            <div class="step">
+                <span>02 · REVIEW</span>
+                <h3>Check eligibility</h3>
+                <p>Read the official criteria and prepare your documents.</p>
+            </div>
+
+            <div class="step">
+                <span>03 · APPLY</span>
+                <h3>Take action</h3>
+                <p>Visit the official portal and follow its instructions.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p><strong>🎓 ScholarBridge</strong></p>
+    <p>Connecting students with educational opportunities.</p>
+    <p>College project prototype · Not an official government service</p>
+    <p>
+        <a href="https://scholarships.gov.in/"
+           target="_blank" rel="noopener noreferrer">
+           National Scholarship Portal
+        </a>
+    </p>
+</footer>
+
+<script>
+const search = document.getElementById("search");
+const level = document.getElementById("level");
+const category = document.getElementById("category");
+const cards = document.querySelectorAll(".scholarship-card");
+const empty = document.getElementById("empty");
+
+function filterScholarships() {
+    let count = 0;
+    const term = search.value.toLowerCase().trim();
+
+    cards.forEach(card => {
+        const title = (
+            card.dataset.title + " " + card.innerText
+        ).toLowerCase();
+
+        const levels = card.dataset.level.split(" ");
+        const categories = card.dataset.category.split(" ");
+
+        const matchesSearch = title.includes(term);
+        const matchesLevel =
+            level.value === "all" || levels.includes(level.value);
+        const matchesCategory =
+            category.value === "all" ||
+            categories.includes(category.value);
+
+        const show =
+            matchesSearch && matchesLevel && matchesCategory;
+
+        card.style.display = show ? "flex" : "none";
+
+        if (show) count++;
+    });
+
+    empty.style.display = count === 0 ? "block" : "none";
+}
+
+search.addEventListener("input", filterScholarships);
+level.addEventListener("change", filterScholarships);
+category.addEventListener("change", filterScholarships);
+
+document.getElementById("reset").addEventListener("click", () => {
+    search.value = "";
+    level.value = "all";
+    category.value = "all";
+    filterScholarships();
+});
+
+document.querySelectorAll(".save-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        const saved = button.getAttribute("aria-pressed") === "true";
+
+        button.setAttribute("aria-pressed", String(!saved));
+        button.classList.toggle("saved", !saved);
+        button.textContent = saved ? "♡ Save" : "♥ Saved";
+    });
+});
+
+document.getElementById("eligibilityForm").addEventListener(
+    "submit", event => {
+        event.preventDefault();
+
+        level.value = document.getElementById("studyLevel").value;
+        category.value = document.getElementById("priority").value;
+        search.value = "";
+
+        filterScholarships();
+
+        const result = document.getElementById("result");
+        result.style.display = "block";
+        result.textContent =
+            "Sample listings have been filtered. Check each official " +
+            "scheme's detailed eligibility requirements before applying.";
+
+        document.getElementById("scholarships").scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+);
+
+filterScholarships();
+</script>
+
+</body>
+</html>
